@@ -173,20 +173,26 @@ const findMaximum = (root) => {
 }
 
 
-function inOrderPredecessor(rootNode, target) {
-  if (rootNode === null || rootNode.val === target) {
-    return null
-  }
-
-  if (rootNode.left) {
-    current = rootNode.left;
-    while(current.right != null) {
-      console.log(current.right)
-      current = current.right;
+function inOrderPredecessor (rootNode, target, parent = null) {
+    // if this is our target node
+    if (target === rootNode.val && rootNode.left) {
+  
+      return findMaxBST(rootNode.left); // reuse function from prior exercise
     }
-    return current.val;
+    // if we need to look to the left of the current node
+  
+    if (target < rootNode.val) {
+      return inOrderPredecessor(rootNode.left, target, parent);
+    }
+    // if we need to look to the right of the current node
+    if (target > rootNode.val) {
+      return inOrderPredecessor(rootNode.right, target, rootNode);
+    }
+    if (parent) {
+      return parent.val;
+    }
+    return null;
   }
-}
 
 
 function deleteNodeBST(rootNode, target) {
