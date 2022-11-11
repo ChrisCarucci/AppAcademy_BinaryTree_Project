@@ -195,28 +195,37 @@ function inOrderPredecessor (rootNode, target, parent = null) {
   }
 
 
-function deleteNodeBST(rootNode, target) {
-  // Do a traversal to find the node. Keep track of the parent
+var deleteNodeBST = function(root, key) {
 
-  // Undefined if the target cannot be found
+  if (!root) return root;
 
-  // Set target based on parent
+    
+    if (root.val === key){
+        if (!root.left && !root.right){
+            return null;
+        } 
+        if (!root.right){
+            return root.left;
+        }
+        const succ = inOrderSuccessor(root.right);
+        root.val = succ.val;
+        root.right = deleteNodeBST(root.right, succ.val);
+        return root;
+      } 
+    
+    if (key < root.val)
+        root.left = deleteNodeBST(root.left, key);
+    if (key > root.val)
+        root.right = deleteNodeBST(root.right, key);
 
-  // Case 0: Zero children and no parent:
-  //   return null
+    return root;
+};
 
-  // Case 1: Zero children:
-  //   Set the parent that points to it to null
-
-  // Case 2: Two children:
-  //  Set the value to its in-order predecessor, then delete the predecessor
-  //  Replace target node with the left most child on its right side, 
-  //  or the right most child on its left side.
-  //  Then delete the child that it was replaced with.
-
-  // Case 3: One child:
-  //   Make the parent point to the child
-
+const inOrderSuccessor = (node) => {
+    while(node.left) {
+        node = node.left;
+    }
+    return node;
 }
 
 module.exports = {
